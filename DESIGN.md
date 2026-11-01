@@ -40,6 +40,18 @@ day = total world time / 24000
 - A chat message announces when a tier begins.
 - Server-side.
 
+## Progress
+
+### Milestone 1 ✓ — difficulty clock (no mob changes)
+
+- Difficulty day = overworld total world time / 24000 × `daySpeedMultiplier` + offset.
+- The offset is set by `/sleepless setday` and saved in the world (`data/sleepless100.dat`).
+- Config `config/sleepless100.cfg`: `daySpeedMultiplier`, `tierStartDays`, `tierChatMessages`.
+- `/sleepless status` (everyone): day, tier, and the next tier and when it starts.
+- `/sleepless setday <n>` (ops only).
+- A chat message goes to all players when a new tier begins, once per tier.
+- The day/tier math lives in `core/DifficultyClock` with no Minecraft imports, and is unit-tested.
+
 ## Phase 2: our own AI
 
 - Track players by sound, light and blood.

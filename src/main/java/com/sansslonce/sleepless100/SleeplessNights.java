@@ -14,7 +14,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     modid = SleeplessNights.MODID,
     version = Tags.VERSION,
     name = "100 Sleepless Nights",
-    acceptedMinecraftVersions = "[1.7.10]")
+    acceptedMinecraftVersions = "[1.7.10]",
+    acceptableRemoteVersions = "*")
 public class SleeplessNights {
 
     public static final String MODID = "sleepless100";

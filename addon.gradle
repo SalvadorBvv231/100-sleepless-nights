@@ -1,0 +1,6 @@
+// Extra build logic for 100 Sleepless Nights.
+
+// Run unit tests with JUnit 5.
+tasks.named("test", Test) {
+    useJUnitPlatform()
+}
