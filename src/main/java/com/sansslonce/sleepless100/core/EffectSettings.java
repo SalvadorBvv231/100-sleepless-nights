@@ -9,6 +9,9 @@ public final class EffectSettings {
     /** Days the final tier takes to ramp from 0 to full strength (other tiers ramp until the next tier starts). */
     public double finalTierRampDays = 25.0;
 
+    /** No diamond armor or weapons from any mob or mod source before this difficulty day (they become iron). */
+    public double diamondMinDay = 150;
+
     // Tier 1
     /** Extra night spawning at full strength: 0.625 = +62.5% hostile mob cap and +62.5% spawn attempts. */
     public double extraNightSpawns = 0.625;

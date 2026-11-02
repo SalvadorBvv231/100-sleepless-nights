@@ -5,6 +5,8 @@ import net.minecraftforge.common.MinecraftForge;
 import com.sansslonce.sleepless100.command.CommandSleepless;
 import com.sansslonce.sleepless100.mobs.ExtraNightSpawner;
 import com.sansslonce.sleepless100.mobs.MobEffectHandler;
+import com.sansslonce.sleepless100.party.PartyManager;
+import com.sansslonce.sleepless100.village.VillageHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -35,6 +37,17 @@ public class CommonProxy {
         FMLCommonHandler.instance()
             .bus()
             .register(new ExtraNightSpawner());
+
+        // Friday Night Party and villages: Forge events plus FML server ticks.
+        registerBoth(new PartyManager());
+        registerBoth(new VillageHandler());
+    }
+
+    private static void registerBoth(Object handler) {
+        MinecraftForge.EVENT_BUS.register(handler);
+        FMLCommonHandler.instance()
+            .bus()
+            .register(handler);
     }
 
     public void postInit(FMLPostInitializationEvent event) {}

@@ -54,10 +54,16 @@ final class MobGear {
         return true;
     }
 
-    /** Tier 5: full armor (chainmail, iron or diamond), all enchanted, plus an enchanted weapon. */
-    static void addFullEnchantedGear(EntityLiving mob, Random rand, int enchantLevel) {
+    /**
+     * Tier 5: full armor (chainmail, iron or diamond), all enchanted, plus an enchanted weapon.
+     * Before the diamond day, the diamond share becomes iron.
+     */
+    static void addFullEnchantedGear(EntityLiving mob, Random rand, int enchantLevel, boolean diamondAllowed) {
         float roll = rand.nextFloat();
         int material = roll < 0.15F ? 4 : roll < 0.6F ? 3 : 2; // 15% diamond, 45% iron, 40% chainmail
+        if (material == 4 && !diamondAllowed) {
+            material = 3;
+        }
         for (int slot = 1; slot <= 4; slot++) {
             ItemStack armor = new ItemStack(EntityLiving.getArmorItemForSlot(slot, material));
             EnchantmentHelper.addRandomEnchantment(rand, armor, enchantLevel);

@@ -144,7 +144,7 @@ public class MobEffectHandler {
         // Tier 5 (full enchanted gear) or else tier 3 (some plain armor / a weapon).
         if (armorWearer) {
             if (rand.nextDouble() < fx.fullGearChance) {
-                MobGear.addFullEnchantedGear(mob, rand, fx.fullGearEnchantLevel);
+                MobGear.addFullEnchantedGear(mob, rand, fx.fullGearEnchantLevel, fx.diamondAllowed);
                 note(log, "FULL ENCHANTED GEAR");
             } else {
                 if (rand.nextDouble() < fx.armorChance) {
@@ -155,6 +155,9 @@ public class MobEffectHandler {
                 }
             }
         }
+
+        // Diamond rule: also catches vanilla's rare diamond armor and anything other mods gave the mob.
+        GearRules.enforce(mob, fx.diamondAllowed);
 
         // Tier 4: bigger creeper explosions (applied when it explodes).
         if (mob instanceof EntityCreeper && fx.creeperRadiusScale > 1.0) {

@@ -30,6 +30,8 @@ public final class MobEffects {
     public final double creeperMaxRadius;
     public final double fullGearChance;
     public final int fullGearEnchantLevel;
+    /** False before {@link EffectSettings#diamondMinDay}: diamond armor and weapons become iron. */
+    public final boolean diamondAllowed;
 
     private MobEffects(double day, int[] tierStarts, EffectSettings s) {
         double t1 = ramp(day, TIER_SPAWNS_AND_RANGE, tierStarts, s.finalTierRampDays);
@@ -49,6 +51,7 @@ public final class MobEffects {
         creeperMaxRadius = Math.max(VANILLA_CREEPER_RADIUS, s.creeperMaxRadius);
         fullGearChance = t5 * chance(s.fullGearChance);
         fullGearEnchantLevel = Math.max(1, s.fullGearEnchantLevel);
+        diamondAllowed = diamondAllowed(day, s);
     }
 
     public static MobEffects forDay(double day, int[] tierStarts, EffectSettings settings) {
@@ -72,6 +75,10 @@ public final class MobEffects {
             return 1.0;
         }
         return (day - start) / (end - start);
+    }
+
+    public static boolean diamondAllowed(double day, EffectSettings s) {
+        return day >= s.diamondMinDay;
     }
 
     /**
