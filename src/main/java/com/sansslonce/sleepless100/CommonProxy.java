@@ -1,6 +1,10 @@
 package com.sansslonce.sleepless100;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import com.sansslonce.sleepless100.command.CommandSleepless;
+import com.sansslonce.sleepless100.mobs.ExtraNightSpawner;
+import com.sansslonce.sleepless100.mobs.MobEffectHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -21,6 +25,16 @@ public class CommonProxy {
         FMLCommonHandler.instance()
             .bus()
             .register(new DifficultyManager());
+
+        // Mob effects: listens to Forge events (spawn, damage, explosions) and FML world ticks.
+        MobEffectHandler mobEffects = new MobEffectHandler();
+        MinecraftForge.EVENT_BUS.register(mobEffects);
+        FMLCommonHandler.instance()
+            .bus()
+            .register(mobEffects);
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new ExtraNightSpawner());
     }
 
     public void postInit(FMLPostInitializationEvent event) {}

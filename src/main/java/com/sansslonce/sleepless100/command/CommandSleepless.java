@@ -14,8 +14,9 @@ import net.minecraft.util.EnumChatFormatting;
 import com.sansslonce.sleepless100.Config;
 import com.sansslonce.sleepless100.DifficultyManager;
 import com.sansslonce.sleepless100.core.DifficultyClock;
+import com.sansslonce.sleepless100.core.MobEffects;
 
-/** /sleepless status (everyone) and /sleepless setday &lt;n&gt; (ops only). */
+/** /sleepless status and /sleepless effects (everyone), /sleepless setday &lt;n&gt; (ops only). */
 public class CommandSleepless extends CommandBase {
 
     private static final int SETDAY_PERMISSION_LEVEL = 2;
@@ -27,7 +28,7 @@ public class CommandSleepless extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/sleepless status  |  /sleepless setday <day>";
+        return "/sleepless status  |  /sleepless effects  |  /sleepless setday <day>";
     }
 
     /** Everyone may run the command; setday checks op permission itself. */
@@ -47,6 +48,8 @@ public class CommandSleepless extends CommandBase {
                     "/sleepless status takes no extra words. To change the day, use: /sleepless setday " + args[1]);
             }
             showStatus(sender, server);
+        } else if ("effects".equalsIgnoreCase(args[0])) {
+            showEffects(sender, server);
         } else if ("setday".equalsIgnoreCase(args[0])) {
             if (!sender.canCommandSenderUseCommand(SETDAY_PERMISSION_LEVEL, getCommandName())) {
                 throw new CommandException("commands.generic.permission");
@@ -112,6 +115,45 @@ public class CommandSleepless extends CommandBase {
         }
     }
 
+    /** Current strength of every effect, for newly spawned mobs. */
+    private static void showEffects(ICommandSender sender, MinecraftServer server) {
+        MobEffects fx = DifficultyManager.currentEffects(server);
+        send(
+            sender,
+            EnumChatFormatting.GOLD + "[100 Sleepless Nights] "
+                + EnumChatFormatting.WHITE
+                + "Effects for new mobs on day "
+                + formatDay(DifficultyManager.getDay(server))
+                + ":");
+        line(sender, "T1 extra night spawns", "+" + pct(fx.extraNightSpawns));
+        line(sender, "T1 follow range", "+" + pct(fx.followRangeBonus));
+        line(sender, "T2 health / damage", "+" + pct(fx.healthBonus) + " / +" + pct(fx.damageBonus));
+        line(sender, "T2 zombies break doors", pct(fx.doorBreakChance) + " chance");
+        line(sender, "T3 armor / weapon", pct(fx.armorChance) + " / " + pct(fx.weaponChance) + " chance");
+        line(
+            sender,
+            "T4 creeper explosion",
+            "x" + String.format(Locale.ROOT, "%.2f", fx.creeperRadiusScale)
+                + " (radius "
+                + String.format(
+                    Locale.ROOT,
+                    "%.1f",
+                    MobEffects
+                        .creeperRadius(MobEffects.VANILLA_CREEPER_RADIUS, fx.creeperRadiusScale, fx.creeperMaxRadius))
+                + ", max "
+                + String.format(Locale.ROOT, "%.1f", fx.creeperMaxRadius)
+                + ")");
+        line(sender, "T5 full enchanted gear", pct(fx.fullGearChance) + " chance");
+    }
+
+    private static void line(ICommandSender sender, String label, String value) {
+        send(sender, EnumChatFormatting.GRAY + label + ": " + EnumChatFormatting.WHITE + value);
+    }
+
+    private static String pct(double fraction) {
+        return Math.round(fraction * 100) + "%";
+    }
+
     private static String formatDay(double day) {
         return String.format(Locale.ROOT, "%.1f", DifficultyClock.displayDay(day));
     }
@@ -135,7 +177,7 @@ public class CommandSleepless extends CommandBase {
     @SuppressWarnings("rawtypes")
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return getListOfStringsMatchingLastWord(args, "status", "setday");
+            return getListOfStringsMatchingLastWord(args, "status", "effects", "setday");
         }
         return null;
     }

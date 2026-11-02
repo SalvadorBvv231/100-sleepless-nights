@@ -6,6 +6,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.WorldServer;
 
 import com.sansslonce.sleepless100.core.DifficultyClock;
+import com.sansslonce.sleepless100.core.MobEffects;
 import com.sansslonce.sleepless100.world.SleeplessWorldData;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -33,6 +34,11 @@ public class DifficultyManager {
             Config.daySpeedMultiplier,
             SleeplessWorldData.get(world)
                 .getDayOffset());
+    }
+
+    /** Effect strengths for mobs spawning right now. */
+    public static MobEffects currentEffects(MinecraftServer server) {
+        return MobEffects.forDay(getDay(server), Config.tierStartDays, Config.effects);
     }
 
     public static int getTier(MinecraftServer server) {
