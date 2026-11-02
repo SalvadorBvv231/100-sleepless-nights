@@ -16,7 +16,7 @@ Vanilla mobs only. Difficulty grows with the world day, and every tier adds to t
 ## Install
 
 1. Install Minecraft 1.7.10 with Forge 10.13.4.1614 or newer.
-2. Download `sleepless100-v1.0.0.jar` from the [releases page](../../releases).
+2. Download `sleepless100-1.0.0.jar` from the [releases page](../../releases).
 3. Put it in the `mods` folder (on a server, the server's `mods` folder; it is server-side).
 4. Start the game. The config file is created on first launch.
 
